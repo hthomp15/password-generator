@@ -15,4 +15,4 @@
 -The password is displayed as an alert or written to the side
 
 ## Screenshot 
-
+<img width="704" alt="Screen Shot 2022-01-07 at 2 05 58 PM" src="https://user-images.githubusercontent.com/92960832/148595443-7a43404d-cccc-4243-ba0d-3c264424e3cd.png">
