@@ -10,63 +10,68 @@ var generateBtn = document.querySelector("#generate");
   var passwordText = document.querySelector("#password");
 
 // Character variables 
-  var lowercase = "abcdefghijklmnopqrstuvwxyz";
-  var uppercase = "ABCDEFGHIJKLMNOPQURTUVWXYZ";
-  var numeric = "0123456789";
-  var special = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+  const lowercase = ["Lowercase Characters ", "abcdefghijklmnopqrstuvwxyz"];
+  const uppercase = ["Uppercase Characters ", "ABCDEFGHIJKLMNOPQURTUVWXYZ"];
+  const numeric = ["Numerics ", "0123456789"];
+  const special = ["Special Characters ", "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"];
   var totalCharacters = []
   var passList = []
-// Prompt variables
-  
+  var password = []
+
+  console.log(lowercase)
+  console.log(uppercase)
+  console.log(numeric)
+  console.log(special)
 /* First --- after button is clicked I need to generate prompts
 character types: uppecase, lowercase, numeric, and special characters
 password length: between 8-128 characters. */
-
-// Confirm Prompts function 
+ 
+// Prompt variables
 var confLower = window.confirm("Would you like to include lowercase characters?");
 var confUpper = window.confirm("would you like to include UPPERCASE characters?");
 var confNumbers = window.confirm("Would you like to include numbers (0-9)?");
 var confSpecial = window.confirm("Would you like to use special characters? (&, *, $, etc)?");
 var characterLength = window.prompt("How long would you like the password to be? Enter a number between 8 and 128.");
 var promptList = [confLower, confUpper, confNumbers, confSpecial,]
+var userChoices = []
   
 
-//Confirm Prompts
+/* Confirm Prompts Function 
+    This adds characters to the passList array if the user confirms the choice */ 
 var confirmPrompts = () => {
   
   if(confLower) {
-    passList += lowercase;
-    console.log(passList);
+    passList += (lowercase[1]);
+    userChoices += (lowercase[0]);
   };
   if(confUpper) {
-    passList += uppercase;
-    console.log(passList);
+    passList += (uppercase[1]);
+    userChoices += (uppercase[0]);
   };
   if(confNumbers) {
-    passList += numeric;
-    console.log(passList);
+    passList += (numeric[1]);
+    userChoices += (numeric[0]);
   };
   if(confSpecial) {
-    passList += special;
-    console.log(passList);
+    passList += (special[1]);
+    userChoices += (special[0]);
   };
   
-}
-
+};
+/* Password Length Prompt
+    This will return the users desired length, between 8 and 128 characters */
 var passwordLength = () => {
-  if(characterLength > 128 && characterLength < 8) {
+  if(characterLength > 128 || characterLength < 8) {
     window.alert("Invalid option, please enter a number between 8 and 128");
-    characterLength;
   } else if (!characterLength) {
     window.alert("Invalid option, please enter a number between 8 and 128");
-    characterLength;
-  }
+  };
   totalCharacters += characterLength;
-  console.log(totalCharacters)
-  
-}
+  console.log(totalCharacters); 
+};
 
-var generateCharacters = () => {
+
+var generatePassword = () => {
   var i = 0
   while (i < promptList.length) {
     confirmPrompts();
@@ -75,10 +80,27 @@ var generateCharacters = () => {
     break;
   } 
   passwordLength();
+  //This will let the user view and confirm their choices.
+  passwordText.textContent = `Your password will be ${totalCharacters} characters long and include:\n\n${userChoices} \n -Click Generate Password below to generate your Unique Password-`;
+  /* Generate Random Password:
+This will Randomly select characters from the passList 
+and add them to the password array.*/
+  for(let i = 0; i < parseInt(totalCharacters); i++) {
+    password += passList[Math.floor(Math.random() * passList.length)];
+  };
+  /* Display on Click:
+  This will display the password when user clicks the button. */
+
 }
 
+var writePassword = () => {
+  passwordText.textContent = password;
+}
 
-generateCharacters()
+generateBtn.addEventListener("click", writePassword)
+
+
+generatePassword();
 
 // // Lowercase Prompt
   
@@ -144,21 +166,7 @@ generateCharacters()
 // }
 
 // Add event listener to generate button
-// generateBtn.addEventListener("click", writePassword());
+// generateBtn.addEventListener("click", writePassword);
 
 
 
-//Old Loop Conditionals 
-//   if(promptList[i].toLowerCase() === "yes") {
-//   passList += passList[i];
-//   if(promptList[i].toLowerCase() !== "yes" || promptList[i].toLowerCase() !== "no") {
-//     window.prompt("Invalid option, please enter yes or no.");
-//   }
-// } else if (i === l) {
-//     if (parseInt(passLength) > 128 || parseInt(passLength) < 8) {
-//       window.prompt("Invalid option, enter a number between 8-128");
-//     } else {
-//       return characterLength;
-//     }
-// }
-// console.log(passList);
