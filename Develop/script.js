@@ -1,27 +1,16 @@
-// Assignment code here
-
-
-// Get references to the #generate element
+// Get references to the #generate and #password element
 var generateBtn = document.querySelector("#generate");
-
-// Write password to the #password input
-// function writePassword() {
-  //var password = generatePassword();
-  var passwordText = document.querySelector("#password");
+var passwordText = document.querySelector("#password");
 
 // Character variables 
-  const lowercase = ["Lowercase Characters ", "abcdefghijklmnopqrstuvwxyz"];
-  const uppercase = ["Uppercase Characters ", "ABCDEFGHIJKLMNOPQURTUVWXYZ"];
+  const lowercase = ["Lowercase ", "abcdefghijklmnopqrstuvwxyz"];
+  const uppercase = ["Uppercase ", "ABCDEFGHIJKLMNOPQURTUVWXYZ"];
   const numeric = ["Numerics ", "0123456789"];
   const special = ["Special Characters ", "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"];
   var totalCharacters = []
   var passList = []
   var password = []
 
-  console.log(lowercase)
-  console.log(uppercase)
-  console.log(numeric)
-  console.log(special)
 /* First --- after button is clicked I need to generate prompts
 character types: uppecase, lowercase, numeric, and special characters
 password length: between 8-128 characters. */
@@ -35,11 +24,10 @@ var characterLength = window.prompt("How long would you like the password to be?
 var promptList = [confLower, confUpper, confNumbers, confSpecial,]
 var userChoices = []
   
-
 /* Confirm Prompts Function 
-    This adds characters to the passList array if the user confirms the choice */ 
-var confirmPrompts = () => {
-  
+    This adds characters to the passList array if the user confirms the choice 
+*/ 
+var confirmPrompts = () => {  
   if(confLower) {
     passList += (lowercase[1]);
     userChoices += (lowercase[0]);
@@ -56,7 +44,6 @@ var confirmPrompts = () => {
     passList += (special[1]);
     userChoices += (special[0]);
   };
-  
 };
 /* Password Length Prompt
     This will return the users desired length, between 8 and 128 characters */
@@ -70,6 +57,12 @@ var passwordLength = () => {
   console.log(totalCharacters); 
 };
 
+/*Generate Password Function:
+    This Generates a random password. 
+    It will loop through our prompt list adding user selections to arrays
+    Then it allows the user to determine the required length
+    Finally it generates a new array with random characters selected from the passList. 
+*/
 
 var generatePassword = () => {
   var i = 0
@@ -81,26 +74,27 @@ var generatePassword = () => {
   } 
   passwordLength();
   //This will let the user view and confirm their choices.
-  passwordText.textContent = `Your password will be ${totalCharacters} characters long and include:\n\n${userChoices} \n -Click Generate Password below to generate your Unique Password-`;
-  /* Generate Random Password:
-This will Randomly select characters from the passList 
-and add them to the password array.*/
+  passwordText.textContent = `Your password will be ${totalCharacters} characters long and include:\n${userChoices} \n\n Click Generate Password below to generate your Unique Password`;
+/* Generate Random Password:
+    This will Randomly select characters from the passList 
+    and add them to the password array.
+*/
   for(let i = 0; i < parseInt(totalCharacters); i++) {
     password += passList[Math.floor(Math.random() * passList.length)];
-  };
-  /* Display on Click:
-  This will display the password when user clicks the button. */
-
+  };  
 }
 
+//This changes the textbox content to the password. 
 var writePassword = () => {
   passwordText.textContent = password;
 }
 
+//This calls the generate password function then writes it in the password textbox when the button is clicked. 
+generatePassword();
 generateBtn.addEventListener("click", writePassword)
 
 
-generatePassword();
+
 
 // // Lowercase Prompt
   
