@@ -1,4 +1,6 @@
 # Password Generator
+- Live Link
+ https://hthomp15.github.io/password-generator/
 
 ## User Story 
 - Employees need to randomly generate passwords that mmeet certain criteria
