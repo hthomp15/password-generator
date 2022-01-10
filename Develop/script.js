@@ -2,32 +2,45 @@
 var generateBtn = document.querySelector("#generate");
 var passwordText = document.querySelector("#password");
 
-// Character variables 
-  const lowercase = ["Lowercase ", "abcdefghijklmnopqrstuvwxyz"];
-  const uppercase = ["Uppercase ", "ABCDEFGHIJKLMNOPQURTUVWXYZ"];
-  const numeric = ["Numerics ", "0123456789"];
-  const special = ["Special Characters ", "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"];
-  var totalCharacters = []
-  var passList = []
-  var password = []
+// Character variables
+const lowercase = ["Lowercase ", "abcdefghijklmnopqrstuvwxyz"];
+const uppercase = ["Uppercase ", "ABCDEFGHIJKLMNOPQURTUVWXYZ"];
+const numeric = ["Numerics ", "0123456789"];
+const special = ["Special Characters ", "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"];
 
-/* First --- after button is clicked I need to generate prompts
-character types: uppecase, lowercase, numeric, and special characters
-password length: between 8-128 characters. */
- 
-// Prompt variables
-var confLower = window.confirm("Would you like to include lowercase characters?");
-var confUpper = window.confirm("would you like to include UPPERCASE characters?");
-var confNumbers = window.confirm("Would you like to include numbers (0-9)?");
-var confSpecial = window.confirm("Would you like to use special characters? (&, *, $, etc)?");
-var characterLength = window.prompt("How long would you like the password to be? Enter a number between 8 and 128.");
-var promptList = [confLower, confUpper, confNumbers, confSpecial,]
+// These are empty arrays. I will add to these based on the user choices.
+var totalCharacters = []
+var passList = []
+var password = []
 var userChoices = []
-  
+
+/* Password Length Prompt
+    This will return the users desired length, between 8 and 128 characters */
+var passwordLength = () => {
+  var characterLength = window.prompt("How long would you like the password to be? Enter a number between 8 and 128.");
+//if the length isn't between 8 and 128 It will alert and loop through the prompt again. 
+  if(characterLength >= 8 && characterLength <= 128) {
+    totalCharacters += characterLength;
+  } else {
+    window.alert("Invalid option, please enter a number between 8 and 128");
+    console.log(totalCharacters)
+    passwordLength()
+    return;
+  };  
+};
+
 /* Confirm Prompts Function 
-    This adds characters to the passList array if the user confirms the choice 
-*/ 
+    This adds characters to the passList array if the user confirms the choice */ 
+
 var confirmPrompts = () => {  
+//List of window Prompts to confirm.
+  var confLower = window.confirm("Would you like to include lowercase characters?");
+  var confUpper = window.confirm("would you like to include UPPERCASE characters?");
+  var confNumbers = window.confirm("Would you like to include numbers (0-9)?");
+  var confSpecial = window.confirm("Would you like to use special characters? (&, *, $, etc)?");
+
+/* If the user confirms (true) the Character Variables will be split and 
+    added to new arrays. */
   if(confLower) {
     passList += (lowercase[1]);
     userChoices += (lowercase[0]);
@@ -45,122 +58,41 @@ var confirmPrompts = () => {
     userChoices += (special[0]);
   };
 };
-/* Password Length Prompt
-    This will return the users desired length, between 8 and 128 characters */
-var passwordLength = () => {
-  if(characterLength > 128 || characterLength < 8) {
-    window.alert("Invalid option, please enter a number between 8 and 128");
-  } else if (!characterLength) {
-    window.alert("Invalid option, please enter a number between 8 and 128");
+
+//Alerts the user they need to choose at least one character type, and reloads the page.
+var checkPrompts = () => {
+  if(passList.length < 1) {
+    window.alert("You must select at least one of the character options.");
+    location.reload();
   };
-  totalCharacters += characterLength;
-  console.log(totalCharacters); 
 };
+
+//This reloads the page. Will be used with a timeout. 
+var timeInterval = ()=> {
+  location.reload();
+}
 
 /*Generate Password Function:
     This Generates a random password. 
-    It will loop through our prompt list adding user selections to arrays
-    Then it allows the user to determine the required length
-    Finally it generates a new array with random characters selected from the passList. 
-*/
-
+    After the password is generated it will display on the screen
+    After 10 seconds the page will refresh */
 var generatePassword = () => {
-  var i = 0
-  while (i < promptList.length) {
-    confirmPrompts();
-    i++;
-    console.log(passList);
-    break;
-  } 
   passwordLength();
+  confirmPrompts();
+  checkPrompts();
   //This will let the user view and confirm their choices.
-  passwordText.textContent = `Your password will be ${totalCharacters} characters long and include:\n${userChoices} \n\n Click Generate Password below to generate your Unique Password`;
+  alert(`Your password will be ${totalCharacters} characters long and include:\n${userChoices}`);
 /* Generate Random Password:
     This will Randomly select characters from the passList 
-    and add them to the password array.
-*/
+    and add them to the password array.*/
   for(let i = 0; i < parseInt(totalCharacters); i++) {
     password += passList[Math.floor(Math.random() * passList.length)];
   };  
-}
+  passwordText.textContent = `${password} \n\n The page will refresh in 5 seconds`;
+//This will run my timeInteval after 5 seconds (refreshing the page).
+  setTimeout(timeInterval, 5000)
+};
 
-//This changes the textbox content to the password. 
-var writePassword = () => {
-  passwordText.textContent = password;
-}
-
-//This calls the generate password function then writes it in the password textbox when the button is clicked. 
-generatePassword();
-generateBtn.addEventListener("click", writePassword)
-
-
-
-
-// // Lowercase Prompt
-  
-//     if(confLower.toLowerCase() === "yes") {
-//       passList += lowercase;
-//     } else if (confLower.toLowerCase() !== "yes" || "no") {
-//       window.prompt("Invalid option, enter yes or no");
-//     }
-
-// // // Uppercase Prompt
-  
-//     if(confUpper.toLowerCase() === "yes") {
-//       passList += uppercase;
-//     } else if (confUpper.toLowerCase() !== "yes" || "no") {
-//       window.prompt("Invalid option, enter yes or no");
-//     }
-
-// // // Numeric Prompt 
-  
-//     if(confNumbers.toLowerCase() === "yes") {
-//       passList += numeric;
-//     } else if (confNumbers.toLowerCase() !== "yes" || "no") {
-//       window.prompt("Invalid option, enter yes or no");
-//     }
-// // // Special Characters  
-  
-//     if(confSpecial.toLowerCase() === "yes") {
-//       passList += special;
-//     } else if (confSpecial.toLowerCase() !== "yes" || "no") {
-//       window.prompt("Invalid option, enter yes or no");
-//     }
-
-// // // Password Length
-
-//     if(parseInt(passLength) > 128 || parseInt(passLength) < 8) {
-//       window.prompt("Invalid option, enter a number between 8-128");
-//     } else {
-//       return(passLength);
-//     }
-//     console.log(passLength)
-// if(parseInt(characterLength) > 128 || parseInt(characterLength) < 8) {
-//   window.prompt("Invalid option, enter a number between 8-128");
-// } else {
-//   return characterLength;
-//   console.log(characterLength)
-// }
-
-
-// }
-//   confirmPrompts()
-// // password length
-  
-// //Next --- User secections are stored
-
-// //Next --- User validates choices, at least one must be chosen 
-
-
-// //Last --- password is displayed in textarea, id "password"
-
-
-//   passwordText.value = 'password';
-//   console.log(passList)
-// }
-
-// Add event listener to generate button
-// generateBtn.addEventListener("click", writePassword);
-
-
-
+/* Generate password button
+    When clicked it will run the generatePassword function. */
+generateBtn.addEventListener("click",generatePassword);
